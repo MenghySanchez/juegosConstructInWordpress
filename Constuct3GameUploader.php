@@ -131,29 +131,14 @@ function c3gu_display_game($atts) {
 
     if (!$game) return "Juego no encontrado.";
 
-    // Ruta del archivo index.html
     $game_url = content_url("/uploads/construct3_games/{$game->folder_name}/index.html");
-
+    
     ob_start(); ?>
-    <div id="c3game-<?php echo esc_attr($game_id); ?>" style="position: relative; width: 100%; height: 600px;">
-        <!-- Aquí se cargará el contenido del juego -->
+    <div style="position: relative; width: 100%; height: 600px;">
+        <iframe id="c3game-<?php echo esc_attr($game_id); ?>" src="<?php echo esc_url($game_url); ?>" width="100%" height="100%" style="border:none;"></iframe>
+        <button onclick="toggleFullscreen('c3game-<?php echo esc_attr($game_id); ?>')" style="position: absolute; bottom: 10px; right: 10px; padding: 8px 12px; background: black; color: white; border: none; cursor: pointer;">Pantalla Completa</button>
     </div>
-    <button onclick="toggleFullscreen('c3game-<?php echo esc_attr($game_id); ?>')" style="position: absolute; bottom: 10px; right: 10px; padding: 8px 12px; background: black; color: white; border: none; cursor: pointer;">Pantalla Completa</button>
-
     <script>
-        document.addEventListener("DOMContentLoaded", function() {
-            // Cargar el juego dinámicamente
-            var gameContainer = document.getElementById('c3game-<?php echo esc_attr($game_id); ?>');
-            var gameUrl = '<?php echo esc_url($game_url); ?>';
-
-            fetch(gameUrl)
-                .then(response => response.text())
-                .then(data => {
-                    gameContainer.innerHTML = data; // Cargar el HTML del juego
-                })
-                .catch(error => console.error('Error cargando el juego:', error));
-        });
-
         function toggleFullscreen(id) {
             let elem = document.getElementById(id);
             if (!document.fullscreenElement) {
